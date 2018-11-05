@@ -12,8 +12,12 @@
     "type": "git",
     "url": "https://github.com/colshacol/storage-changed.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["localStorage", "sessionStorage", "storage"],
+  "author": {
+    "name": "Colton Colcleasure",
+    "email": "colshacol@gmail.com",
+    "url": "https://github.com/colshacol"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.51",
