@@ -4,14 +4,13 @@ A tiny function that dispatches events in the same tab that `localStorage` and `
 
 **No dependencies!**  
 **Much blazing!**  
-**Only 1kb!**
+**Only ~800b!**
 
 ```sh
 npm i storage-changed
-# or, if you are cool...
+# or, if u r cool...
 yarn add storage-changed
 ```
-
 
 ## The Problem
 
@@ -28,9 +27,9 @@ localStorage.setItem('foo', 'bar')
 The solution is `storage-changed`, obviously.
 
 ```js
-import storageChangedEmitter from 'storage-changed'
+import storageChanged from 'storage-changed'
 
-storageChangedEmitter(window.localStorage)
+storageChanged('local')
 
 // Now this shit do work!
 window.addEventListener('storageChanged', doCoolShit)
@@ -38,10 +37,12 @@ window.addEventListener('storageChanged', doCoolShit)
 
 ## The Options
 
-You can pass an options object as the second argument to `storageChangedEmitter`. This options object currently supports one property: `eventName`. Setting the `eventName` will allow you flexibility to have different names for different targets, such as `localStorage` and `sessionStorage`.
+The first argument must be a string, one of: `"local"` or `"session"` to determine which storage you wish to emit events for.
+
+You can pass an options object as the second argument to `storageChanged`. This options object currently supports one property: `eventName`. Setting the `eventName` will allow you flexibility to have different names for different targets, such as `localStorage` and `sessionStorage`.
 
 ```js
-storageChangedEmitter(window.sessionStorage, {
+storageChanged('session', {
   eventName: 'TonyDanza'
 })
 
@@ -53,7 +54,7 @@ window.addEventListener('TonyDanza', doBadAssShit)
 As with any event listener, an event is provided to your callback. In this instance, I don't know what the fuck all is in the event, but I can guarantee you that `event.detail` will have two properties: `key`, and `value`. These values represent the storage key that changed and the new value that accompanies the change.
 
 ```js
-storageChangedEmitter(window.localStorage, {
+storageChanged('local', {
   eventName: 'TonyDanza'
 })
 

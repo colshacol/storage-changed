@@ -1,24 +1,36 @@
-const emit = (detail, options) => {
+import storageUtils from 'storage-utilities'
+
+const emit = (which, target, detail, options) => {
   return new Promise(() => {
+    let attempts = 0
+
     const interval = setInterval(() => {
-      if ((window.localStorage[detail.key] = detail.value)) {
-        window.dispatchEvent(new CustomEvent(options.eventName, { detail }))
+      if (attempts++ >= options.timeout) clearInterval(interval)
+
+      const event = new CustomEvent(options.eventName, { detail })
+
+      if (target[detail.key] === detail.value) {
+        window.dispatchEvent(event)
         clearInterval(interval)
       }
     }, 10)
   })
 }
 
-const DEFAULT_OPTIONS = {
-  eventName: 'storageChanged'
-}
+// onStorageChanged
+export default (which, options = {}) => {
+  // Set up missing options.
+  options.eventName = options.eventName || `${which}StorageChanged`
+  options.timeout = options.timeout ? options.timeout / 10 : 15
 
-// storageChangedEmitter
-module.exports = (target, options = DEFAULT_OPTIONS) => {
-  target.setItem = new Proxy(target.setItem, {
-    apply(target, self, [key, value]) {
-      emit({ key, value }, options)
-      Reflect.apply(target, self, [key, value])
-    }
-  })
+  // Get correct storage target and ref setItem.
+  const target = window[`${which}Storage`]
+  const setItem = target.setItem.bind(target)
+
+  target.setItem = (key, value) => {
+    const v = storageUtils.stringify(value)
+
+    emit(which, target, { key, value: v }, options)
+    setItem(key, v)
+  }
 }

@@ -1,15 +1,16 @@
 {
   "name": "storage-changed",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A tiny function that dispatches events in the same tab that localStorage and sessionStorage are changed in.",
   "main": "index.js",
   "reveal": true,
   "scripts": {
+    "build": "babel ./src/index.js -o ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/colshacol/storage-changed.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colshacol/storage-changed.git"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +20,8 @@
     "@babel/core": "^7.0.0-beta.51",
     "@babel/preset-env": "^7.0.0-beta.51",
     "babel-preset-minify": "^0.4.3"
+  },
+  "dependencies": {
+    "storage-utilities": "^0.0.0"
   }
 }
