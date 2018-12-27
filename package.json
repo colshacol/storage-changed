@@ -1,6 +1,6 @@
 {
   "name": "storage-changed",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "A tiny function that dispatches events in the same tab that localStorage and sessionStorage are changed in.",
   "main": "index.js",
   "reveal": true,
