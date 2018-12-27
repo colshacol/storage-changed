@@ -1,6 +1,6 @@
 import storageUtils from 'storage-utilities'
 
-const emit = (which, target, detail, options) => {
+const emit = (target, detail, options) => {
   return new Promise(() => {
     let attempts = 0
 
@@ -17,20 +17,53 @@ const emit = (which, target, detail, options) => {
   })
 }
 
-// onStorageChanged
-export default (which, options = {}) => {
+const getEventName = (options) => {
+  return options.eventName || options.targetName + 'StorageChanged'
+}
+
+const getTimeout = (options) => {
+  return options.timeout ? options.timeout / 10 : 15
+}
+
+const getTarget = (storage) => {
+  if (typeof storage === 'string') {
+    return window[`${storage}Storage`]
+  }
+
+  return storage
+}
+
+const getTargetName = (storage) => {
+  return typeof storage === 'string'
+    ? storage === 'session'
+      ? 'session'
+      : `local`
+    : storage === window.sessionStorage
+      ? 'session'
+      : 'local'
+}
+
+export default (storage, options) => {
+  const opts = options || {}
   // Set up missing options.
-  options.eventName = options.eventName || `${which}StorageChanged`
-  options.timeout = options.timeout ? options.timeout / 10 : 15
+  opts.targetName = getTargetName(storage)
+  opts.eventName = getEventName(opts)
+  opts.timeout = getTimeout(opts)
 
   // Get correct storage target and ref setItem.
-  const target = window[`${which}Storage`]
+  const target = getTarget(storage)
   const setItem = target.setItem.bind(target)
+  const removeItem = target.removeItem.bind(target)
 
   target.setItem = (key, value) => {
-    const v = storageUtils.stringify(value)
+    const _value = storageUtils.stringify(value)
 
-    emit(which, target, { key, value: v }, options)
-    setItem(key, v)
+    emit(target, { key, value: _value, _target: opts.targetName }, opts)
+    setItem(key, _value)
+  }
+
+  target.removeItem = (key) => {
+    emit(target, { key, _target: opts.targetName }, opts)
+    removeItem(key)
   }
 }
