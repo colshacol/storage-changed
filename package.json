@@ -1,6 +1,6 @@
 {
   "name": "storage-changed",
-  "version": "2.0.0",
+  "version": "3.0.0-alpha.0",
   "description": "A tiny function that dispatches events in the same tab that localStorage and sessionStorage are changed in.",
   "main": "index.js",
   "reveal": true,
@@ -12,7 +12,11 @@
     "type": "git",
     "url": "https://github.com/colshacol/storage-changed.git"
   },
-  "keywords": ["localStorage", "sessionStorage", "storage"],
+  "keywords": [
+    "localStorage",
+    "sessionStorage",
+    "storage"
+  ],
   "author": {
     "name": "Colton Colcleasure",
     "email": "colshacol@gmail.com",
